@@ -113,13 +113,13 @@ kind: Service
 metadata:
   name: todolist-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: todolist-service
   ports:
   - name: http
     port: 3000
-    targetPort: 3000
+    nodePort: 30001
     protocol: TCP
 ---
 apiVersion: v1
@@ -127,13 +127,13 @@ kind: Service
 metadata:
   name: user-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: user-service
   ports:
   - name: http
     port: 3002
-    targetPort: 3002
+    nodePort: 30002
     protocol: TCP
 ---
 apiVersion: v1
@@ -141,13 +141,13 @@ kind: Service
 metadata:
   name: mongo-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: mongo-service
   ports:
   - name: http
     port: 3001
-    targetPort: 3001
+    nodePort: 30003
     protocol: TCP
 ---
 apiVersion: v1
@@ -155,13 +155,13 @@ kind: Service
 metadata:
   name: management-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: management-service
   ports:
   - name: http
     port: 3003
-    targetPort: 3003
+    nodePort: 30004
     protocol: TCP
 ---
 apiVersion: v1
@@ -169,10 +169,10 @@ kind: Service
 metadata:
   name: mongo
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: mongo
   ports:
   - name: http
     port: 27017
-    targetPort: 27017
+    nodePort: 27017
