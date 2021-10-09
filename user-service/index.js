@@ -7,14 +7,15 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.post("/adduser", (req, res) => {
+app.post("/user", (req, res) => {
+    console.log(req.body)
     if (!req.body || !req.body.username) {
         res.status(400).json({
             code: 'INVALID_REQUEST',
             message: 'Missing required field: username',
         })
     }
-    axios.post("http://mongo-service:3001/adduser", {
+    axios.post(`http://localhost:${config.PORT.MONGO_SERVICE}/user`, {
         username: req.body.username
     }).then(() => {
         res.status(204).end()
@@ -26,10 +27,16 @@ app.post("/adduser", (req, res) => {
     })
 })
 
-app.get("/getalluser", (req, res) => {
-    axios.get("http://mongo-service:3001/getalluser")
-        .then((data) => {
+app.get("/users", (req, res) => {
+    axios.get(`http://localhost:${config.PORT.MONGO_SERVICE}/users`)
+        .then(data => {
             res.json(data.data)
+        })
+        .catch(err => {
+            res.status(500).json({
+                code: err.code,
+                message: err.message,
+            })
         })
 })
 

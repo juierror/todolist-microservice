@@ -10,20 +10,11 @@ mongoose.connect(config.MONGO_URI, { useNewUrlParser: true })
 const user = mongoose.model('user', { username: String })
 const todolist = mongoose.model('todolist', { username: String, list: [{ todo: String, complete: false }] })
 
-app.get("/getalluser", async (req, res) => {
-    res.json(await user.find({}))
+app.get("/users", async (req, res) => {
+    res.status(200).json(await user.find({}))
 })
 
-app.get("/getalltodo", async (req, res) => {
-    res.json(await todolist.find({}))
-})
-
-app.post("/gettodo", async (req, res) => {
-    let find_todo = await todolist.findOne({ username: req.body.username })
-    res.json(find_todo)
-})
-
-app.post("/adduser", async (req, res) => {
+app.post("/user", async (req, res) => {
     console.log(req.body)
     let find_user = await user.find({ username: req.body.username })
     if (find_user.length == 0) {
@@ -39,7 +30,16 @@ app.post("/adduser", async (req, res) => {
     res.status(200).end()
 })
 
-app.post("/addtodo", async (req, res) => {
+app.get("/all-todo", async (req, res) => {
+    res.status(200).json(await todolist.find({}))
+})
+
+app.get("/todo", async (req, res) => {
+    let find_todo = await todolist.findOne({ username: req.query.username })
+    res.status(200).json(find_todo)
+})
+
+app.post("/todo", async (req, res) => {
     let find_todo = await todolist.findOne({ username: req.body.username })
     find_todo.list.push({
         todo: req.body.todo,
@@ -50,11 +50,11 @@ app.post("/addtodo", async (req, res) => {
         {
             $set: { list: find_todo.list }
         })
-    res.json(find_todo.list)
+    res.status(200).json(find_todo.list)
 
 })
 
-app.post("/changestate", async (req, res) => {
+app.post("/change-state", async (req, res) => {
     let find_todo = await todolist.findOne({ username: req.body.username })
     for (var i = 0; i < find_todo.list.length; i++) {
         if (find_todo.list[i].todo == req.body.todo) {
@@ -65,7 +65,7 @@ app.post("/changestate", async (req, res) => {
         {
             $set: { list: find_todo.list }
         })
-    res.json(find_todo.list)
+    res.status(200).json(find_todo.list)
 })
 
 app.listen(config.PORT.MONGO_SERVICE, async () => {
