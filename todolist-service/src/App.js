@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import { Layout, Button } from 'antd';
+import config from '../../config.json'
 
 const { Header, Content } = Layout;
 
@@ -40,11 +41,12 @@ class App extends Component {
                   <Button onClick={e => {
                     this.setState({ phase: !this.state.phase })
                     let new_user = { username: this.state.username }
-                    axios.post("http://localhost:3002/adduser", new_user).then(result => {
-                      axios.post("http://localhost:3003/gettodo", new_user).then(result => {
-                        console.log(result)
-                        this.setState({ todolist: result.data })
-                      })
+                    axios.post(`http://localhost:${config.PORT.USER_SERVICE}/user`, new_user).then(result => {
+                      axios.get(`http://localhost:${config.PORT.TODO_MANAGEMENT_SERVICE}/todo?username=${new_user.username}`)
+                        .then(result => {
+                          console.log(result)
+                          this.setState({ todolist: result.data })
+                        })
                     })
 
                   }}>OK</Button>
@@ -60,7 +62,7 @@ class App extends Component {
             }
               value={this.state.todo}></input>
             <Button onClick={e => {
-              axios.post("http://localhost:3003/addtodo", {
+              axios.post(`http://localhost:${config.PORT.TODO_MANAGEMENT_SERVICE}/todo`, {
                 username: this.state.username,
                 todo: this.state.todo
               }).then(result => {
@@ -74,7 +76,7 @@ class App extends Component {
                   <div>
                     <li key={val.todo}>{val.todo}</li>
                     <Button onClick={e => {
-                      axios.post("http://localhost:3003/changestate", {
+                      axios.post(`http://localhost:${config.PORT.TODO_MANAGEMENT_SERVICE}/change-state`, {
                         username: this.state.username,
                         todo: val.todo
                       }).then(result => {

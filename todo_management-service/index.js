@@ -7,8 +7,8 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.post("/addtodo", (req, res) => {
-    axios.post("http://mongo-service:3001/addtodo", {
+app.post("/todo", (req, res) => {
+    axios.post(`http://localhost:${config.PORT.MONGO_SERVICE}/todo`, {
         username: req.body.username,
         todo: req.body.todo
     }).then(data => {
@@ -21,8 +21,8 @@ app.post("/addtodo", (req, res) => {
     })
 })
 
-app.get("/getalltodo", (req, res) => {
-    axios.get("http://mongo-service:3001/getalltodo")
+app.get("/all-todo", (req, res) => {
+    axios.get(`http://localhost:${config.PORT.MONGO_SERVICE}/all-todo`)
         .then(data => {
             res.status(200).json(data.data)
         }).catch(err => {
@@ -33,27 +33,21 @@ app.get("/getalltodo", (req, res) => {
         })
 })
 
-app.post("/gettodo", (req, res) => {
-    if (!req.body || !req.body.username) {
-        res.status(400).json({
-            code: 'INVALID_REQUEST',
-            message: 'Missing required field: username',
+app.get("/todo", (req, res) => {
+    axios.get(`http://localhost:${config.PORT.MONGO_SERVICE}/todo?${req.query.username}`)
+        .then((data) => {
+            res.json(data.data.list)
         })
-    }
-    axios.post("http://mongo-service:3001/gettodo", {
-        username: req.body.username
-    }).then((data) => {
-        res.json(data.data.list)
-    }).catch(err => {
-        res.status(500).json({
-            code: err.code,
-            message: err.message,
+        .catch(err => {
+            res.status(500).json({
+                code: err.code,
+                message: err.message,
+            })
         })
-    })
 })
 
-app.post("/changestate", (req, res) => {
-    axios.post("http://mongo-service:3001/changestate", {
+app.post("/change-state", (req, res) => {
+    axios.post(`http://localhost:${config.PORT.MONGO_SERVICE}/change-state`, {
         username: req.body.username,
         todo: req.body.todo
     }).then(data => {
