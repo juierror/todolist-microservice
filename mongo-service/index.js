@@ -1,10 +1,11 @@
-var express = require("express")
-var mongoose = require("mongoose")
+const express = require("express")
+const mongoose = require("mongoose")
+const config = require("../config.json")
 
-app = express()
+const app = express()
 app.use(express.json())
 
-mongoose.connect('mongodb://mongo:27017/todolist', { useNewUrlParser: true })
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true })
 
 const user = mongoose.model('user', { username: String })
 const todolist = mongoose.model('todolist', { username: String, list: [{ todo: String, complete: false }] })
@@ -67,8 +68,8 @@ app.post("/changestate", async (req, res) => {
     res.json(find_todo.list)
 })
 
-app.listen(3001, async () => {
-    console.log("start database server")
+app.listen(config.PORT.MONGO_SERVICE, async () => {
+    console.log(`Mongo service listening on port ${config.PORT.MONGO_SERVICE}`)
     await user.deleteMany({})
     await todolist.deleteMany({})
 

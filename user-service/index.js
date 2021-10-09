@@ -1,8 +1,9 @@
-var express = require("express")
-var axios = require("axios")
-var cors = require("cors")
+const express = require("express")
+const axios = require("axios")
+const cors = require("cors")
+const config = require("../config.json")
 
-app = express()
+const app = express()
 app.use(express.json())
 app.use(cors())
 
@@ -19,6 +20,7 @@ app.get("/getalluser", (req, res) => {
         res.json(data.data)
     })
 })
-app.listen(3002, () => {
-    console.log("start user server")
+
+app.listen(config.PORT.USER_SERVICE, () => {
+    console.log(`User service listening on port ${config.PORT.USER_SERVICE}`)
 })
