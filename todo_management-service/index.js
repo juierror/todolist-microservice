@@ -1,8 +1,9 @@
-var express = require("express")
-var axios = require("axios")
-var cors = require("cors")
+const express = require("express")
+const axios = require("axios")
+const cors = require("cors")
+const config = require("../config.json")
 
-app = express()
+const app = express()
 app.use(express.json())
 app.use(cors())
 
@@ -38,6 +39,6 @@ app.post("/changestate", (req, res) => {
     })
 })
 
-app.listen(3003, () => {
-    console.log("start todo server")
+app.listen(config.PORT.TODO_MANAGEMENT_SERVICE, () => {
+    console.log(`Todo management service listening on port ${config.PORT.TODO_MANAGEMENT_SERVICE}`)
 })

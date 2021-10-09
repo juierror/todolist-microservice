@@ -1,0 +1,8 @@
+{
+  "PORT": {
+    "MONGO_SERVICE": 3001,
+    "USER_SERVICE": 3002,
+    "TODO_MANAGEMENT_SERVICE": 3003 
+  },
+  "MONGO_URI": "mongodb://mongo:27017/todolist"
+}
