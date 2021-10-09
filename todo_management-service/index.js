@@ -12,21 +12,43 @@ app.post("/addtodo", (req, res) => {
         username: req.body.username,
         todo: req.body.todo
     }).then(data => {
-        res.json(data.data)
+        res.status(200).json(data.data)
+    }).catch(err => {
+        res.status(500).json({
+            code: err.code,
+            message: err.message,
+        })
     })
 })
 
 app.get("/getalltodo", (req, res) => {
-    axios.get("http://mongo-service:3001/getalltodo").then((data) => {
-        res.json(data.data)
-    })
+    axios.get("http://mongo-service:3001/getalltodo")
+        .then(data => {
+            res.status(200).json(data.data)
+        }).catch(err => {
+            res.status(500).json({
+                code: err.code,
+                message: err.message,
+            })
+        })
 })
 
 app.post("/gettodo", (req, res) => {
+    if (!req.body || !req.body.username) {
+        res.status(400).json({
+            code: 'INVALID_REQUEST',
+            message: 'Missing required field: username',
+        })
+    }
     axios.post("http://mongo-service:3001/gettodo", {
         username: req.body.username
     }).then((data) => {
         res.json(data.data.list)
+    }).catch(err => {
+        res.status(500).json({
+            code: err.code,
+            message: err.message,
+        })
     })
 })
 
@@ -35,7 +57,12 @@ app.post("/changestate", (req, res) => {
         username: req.body.username,
         todo: req.body.todo
     }).then(data => {
-        res.json(data.data)
+        res.status(200).json(data.data)
+    }).catch(err => {
+        res.status(500).json({
+            code: err.code,
+            message: err.message,
+        })
     })
 })
 
