@@ -7,6 +7,7 @@ import config from '../../config.json'
 const { Header, Content } = Layout;
 
 class App extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +29,7 @@ class App extends Component {
                   backgroundColor: "#1C72F7",
                   padding: "20px"
                 }}>
-                  <h1 style={{ color: "#D8E4F7" }}>TODO List</h1>
+                  <h1 style={{ color: "#FFFFFFF" }}>TODO Lists</h1>
                 </div>
               </Header>
               <Content>
@@ -44,7 +45,6 @@ class App extends Component {
                     axios.post(`http://localhost:${config.PORT.USER_SERVICE}/user`, new_user).then(result => {
                       axios.get(`http://localhost:${config.PORT.TODO_MANAGEMENT_SERVICE}/todo?username=${new_user.username}`)
                         .then(result => {
-                          console.log(result)
                           this.setState({ todolist: result.data })
                         })
                     })
