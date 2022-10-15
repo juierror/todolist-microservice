@@ -1,5 +1,3 @@
-node_modules
-./mongo-service/node_modules
-./user-service/node_modules
-./todolist-service/node_modules
-./todo_management-service/node_modules
+# Dependency directories
+node_modules/
+
